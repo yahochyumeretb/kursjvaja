@@ -1,0 +1,80 @@
+package Floyd;
+
+import java.util.Arrays;
+
+public class FloydAlgorithm {
+
+public static void main(String[] args) {
+char[] vertex = {'A','B','C','D','E','F','G'};
+int[][] matrix = new int[vertex.length][vertex.length];
+final int N = 65536;
+matrix[0] = new int[] { 0, 5, 7, N, N, N, 2 };
+matrix[1] = new int[] { 5, 0, N, 9, N, N, 3 };
+matrix[2] = new int[] { 7, N, 0, N, 8, N, N };
+matrix[3] = new int[] { N, 9, N, 0, N, 4, N };
+matrix[4] = new int[] { N, N, 8, N, 0, 5, 4 };
+matrix[5] = new int[] { N, N, N, 4, 5, 0, 6 };
+matrix[6] = new int[] { 2, 3, N, N, 4, 6, 0 };
+Graph graph = new Graph(vertex.length, vertex, matrix);
+graph.flyod();
+graph.show();
+}
+
+}
+// Создаем новую картинку
+class Graph {
+private char[] vertex;// Массив вершин
+private int[][] dis;// Массив расстояний
+private int[][] pre;// Узел-предшественник
+
+public Graph(int length,char[] vertex,int[][] matrix) {
+this.vertex = vertex;
+this.dis=matrix;
+this.pre = new int[length][length];
+// Инициализируем предварительный массив
+for(int i = 0 ; i < length;i++) {
+Arrays.fill(pre[i], i);
+}
+}
+// Отображение массива pre и dis
+public void show() {
+
+// Для удобства чтения оптимизируем вывод
+char[] vertex = { 'A', 'B', 'C', 'D', 'E', 'F', 'G' };
+for (int k = 0; k < dis.length; k++) {
+// Сначала выводим строку предварительного массива
+for (int i = 0; i < dis.length; i++) {
+System.out.print(vertex[pre[k][i]] + " ");
+}
+System.out.println();
+// Выводим строку данных в массив dis
+for (int i = 0; i < dis.length; i++) {
+System.out.print("("+vertex[k]+"К"+vertex[i]+"Самый короткий путь" + dis[k][i] + ") ");
+}
+System.out.println();
+System.out.println();
+
+}
+
+}
+public void flyod() {
+int len = 0;
+// Средний узел начинает движение, средняя вершина [A, B, C, D, E, F, G]
+for(int k = 0 ; k < vertex.length;k++) {
+// Начальная вершина начинает перемещаться, начальная вершина [A, B, C, D, E, F, G]
+for(int i = 0 ; i < vertex.length;i++) {
+// Конечная точка начинает движение, конечная точка [A, B, C, D, E, F, G]
+for(int j = 0 ; j < vertex.length;j++) {
+len = dis[i][k]+dis[k][j];
+// Если len меньше прямого расстояния от i до j
+if(len<dis[i][j]) {
+// Обновить dis и pre
+dis[i][j] = len;
+pre[i][j]=pre[k][j];
+}
+}
+}
+}
+}
+}
+
